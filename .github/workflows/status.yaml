@@ -1,0 +1,122 @@
+name: "Statuses"
+
+on: push
+#  https://github.com/meroware/example-workflow-dispatch/blob/master/.github/workflows/test.yml
+#  https://github.com/marketplace/actions/workflow-dispatch
+#  https://github.blog/changelog/2020-07-06-github-actions-manual-triggers-with-workflow_dispatch/
+# on:
+#     workflow_run:
+#         workflows:
+#             - Status
+#         types:
+#             - completed
+    # pull_request:
+    #     branches:
+    #         - main
+
+env:
+    START_SCENARIO: "starter"
+    BLACKFIRE_SERVER_ID: '${{ secrets.BLACKFIRE_SERVER_ID }}'
+    BLACKFIRE_SERVER_TOKEN: '${{ secrets.BLACKFIRE_SERVER_TOKEN }}'
+    BLACKFIRE_CLIENT_ID: '${{ secrets.BLACKFIRE_CLIENT_ID }}'
+    BLACKFIRE_CLIENT_TOKEN: '${{ secrets.BLACKFIRE_CLIENT_TOKEN }}'
+    BLACKFIRE_ENV_UUID: '${{ secrets.BLACKFIRE_ENV_UUID }}'
+    BLACKFIRE_BUILD_TOKEN: '${{ secrets.BLACKFIRE_BUILD_TOKEN }}'
+
+jobs:
+    initial:
+        name: Setup and test starter scenario
+        runs-on: ubuntu-latest
+        outputs:
+            scenarios: ${{ steps.scenarios.outputs.list }}
+        steps:
+            - uses: actions/checkout@v2
+            - name: Setup Platform.sh
+              id: platformsh
+              uses: ./.github/actions/platformsh
+              with:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  PLATFORMSH_CLI_TOKEN: ${{ secrets.PLATFORMSH_CLI_TOKEN }}
+            - name: Verify status with Blackfire Player
+              run: |
+                  # The current scenario file needs to be in root for paths to work. See next step comment for more details.
+                  cp .github/tests/status/scenarios/${{ env.START_SCENARIO}}.yml blackfire.yaml
+                  blackfire-player run blackfire.yaml --endpoint=${{ steps.platformsh.outputs.url }}
+            # - name: Verify status within Blackfire build
+            #   run: |
+            #       # Blackfire looks for a .blackfire.yaml file in root specifically. This moves the current scenario file into a mount that has been
+            #       #   symlinked during the build hook. It's necessary to do this prior to running the blackfire-player so that both tests can use
+            #       #   the same `load` paths for groups in `.github/tests/status/groups`. 
+            #       platform mount:download -m .demo --target .demo -y -q
+            #       cp .github/tests/status/scenarios/${{ env.START_SCENARIO }}.yml .demo/bf.yaml
+            #       platform mount:upload -m .demo --source .demo -y -q
+            #       blackfire build-trigger ${{ steps.platformsh.outputs.url  }} --env=${{ env.BLACKFIRE_ENV_UUID }} --token=${{ env.BLACKFIRE_BUILD_TOKEN }}
+            - name: Retrieve remaining scenarios
+              id: scenarios
+              run: |
+                REMOVE=${{ env.START_SCENARIO }}
+                SCENARIOS=$(python -c '
+                import os
+                import sys
+                import json
+                dirs=os.listdir("{}/.github/tests/status/scenarios".format(os.getcwd()))
+                scenarios=[scenario.split(".")[0] for scenario in dirs]
+                scenarios.remove(sys.argv[1])
+                print(json.dumps(scenarios))
+                ' $REMOVE)
+                echo "::set-output name=list::$SCENARIOS"
+
+    test:
+        needs: initial
+        runs-on: ubuntu-latest
+        name: "Test demo scenario"
+        strategy:
+            fail-fast: false
+            max-parallel: 1
+            matrix:
+                scenario: ${{fromJSON(needs.initial.outputs.scenarios)}}
+        steps:
+            - uses: actions/checkout@v2
+            - name: Setup Platform.sh
+              id: platformsh
+              uses: ./.github/actions/platformsh
+              with:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  PLATFORMSH_CLI_TOKEN: ${{ secrets.PLATFORMSH_CLI_TOKEN }}
+            - name: Setup the scenario
+              run: |
+                platform ssh 'rm .demo/settings.json' -q
+                platform ssh 'export PLATFORMSH_DEMO=${{ matrix.scenario }} && .platform-scripts/demo.sh'
+            - name: Verify status with Blackfire Player
+              run: |
+                  # The current scenario file needs to be in root for paths to work. See next step comment for more details.
+                  cp .github/tests/status/scenarios/${{ matrix.scenario }}.yml blackfire.yaml
+                  blackfire-player run blackfire.yaml --endpoint=${{ steps.platformsh.outputs.url }}
+            # - name: Verify status within Blackfire build
+            #   run: |
+            #       # Blackfire looks for a .blackfire.yaml file in root specifically. This moves the current scenario file into a mount that has been
+            #       #   symlinked during the build hook. It's necessary to do this prior to running the blackfire-player so that both tests can use
+            #       #   the same `load` paths for groups in `.github/tests/status/groups`. 
+            #       platform mount:download -m .demo --target .demo -y -q
+            #       cp .github/tests/status/scenarios/${{ matrix.scenario }}.yml .demo/bf.yaml
+            #       platform mount:upload -m .demo --source .demo -y -q
+            #       blackfire build-trigger ${{ steps.platformsh.outputs.url  }} --env=${{ env.BLACKFIRE_ENV_UUID }} --token=${{ env.BLACKFIRE_BUILD_TOKEN }}
+
+    reset:
+        needs: test
+        runs-on: ubuntu-latest
+        name: "Reset the environment to starter scenario"
+        steps:
+            - uses: actions/checkout@v2
+            - name: Setup Platform.sh
+              id: platformsh
+              uses: ./.github/actions/platformsh
+              with:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  PLATFORMSH_CLI_TOKEN: ${{ secrets.PLATFORMSH_CLI_TOKEN }}
+            - name: Reset the environment
+              run: |
+                  platform environment:deactivate --no-delete-branch -y
+                  platform environment:activate -y
+            # - name: Verify the environment has been reset
+            #   run: blackfire-player run .github/tests/status/scenarios/${{ env.START_SCENARIO }}.yml --endpoint=${{ steps.await-env.outputs.env_url }}

@@ -1,0 +1,95 @@
+recommendations:
+    php.security.avoid_vulnerable_dependencies:
+        enabled: false
+    php.drupal8.enable_apcu:
+        enabled: false
+    php.drupal8.twig_cache:
+        enabled: false
+        
+tests:
+    'The homepage should be fast':
+        path: 
+          - '/'
+        assertions:
+            - 'main.wall_time <= 250ms'
+
+    # 'Some Composer dependencies have known security issues and should be upgraded':
+    #     path:
+    #         - '/.*'
+    #     assertions:
+    #         - { expression: 'not has_vulnerable_dependencies()' }
+
+    # 'You should enable APCu for Drupal 8':
+    #     path:
+    #         - '/.*'
+    #     assertions:
+    #         - { label: null, expression: 'metrics.drupal8.fast_cache.count > 0' }
+    #     when: 'metrics.drupal8.installed.count > 0'
+
+    # 'You should enable twig cache in Drupal 8':
+    #     path:
+    #         - '/.*'
+    #     assertions:
+    #         - { label: null, expression: 'metrics.drupal8.twig_cache.construct.count >= 1' }
+    #     when: 'metrics.drupal8.installed.count > 0'
+
+    '"assert.active" is a dev_only feature and should be disabled in production':
+        path:
+            - '/.*'
+        assertions:
+            - { expression: 'runtime.configuration.assert_active === false' }
+    '"display_errors" should be disabled':
+        path:
+            - '/.*'
+        assertions:
+            - { expression: 'not is_configuration_enabled("display_errors")' }
+    '"display_startup_errors" should not be enabled':
+        path:
+            - '/.*'
+        assertions:
+            - { expression: 'not is_configuration_enabled("display_startup_errors")' }
+    '"max_execution_time" should be less than 30 seconds for Web requests':
+        path:
+            - '/.*'
+        assertions:
+            - { expression: 'runtime.configuration.max_execution_time <= 30' }
+    '"session.use_strict_mode" should be enabled':
+        path:
+            - '/.*'
+        assertions:
+            - { expression: 'runtime.configuration.session_use_strict_mode === true' }
+    '"zend.detect_unicode" should be disabled as BOMs are not portable':
+        path:
+            - '/.*'
+        assertions:
+            - { expression: 'runtime.configuration.zend_detect_unicode === false' }
+    'The realpath cache ttl should be more than one hour in production':
+        path:
+            - '/.*'
+        assertions:
+            - { expression: 'runtime.configuration.realpath_cache_ttl >= 3600' }
+    'The session garbage collector should be disabled in production':
+        path:
+            - '/.*'
+        assertions:
+            - { expression: 'runtime.configuration.session_gc_probability === 0' }
+
+scenarios: |
+    #!blackfire-player
+
+    name "Drupal Standard installation (no content)"
+
+    load ".github/tests/status/groups/starter.bkf"
+
+    scenario
+        include starter-root
+
+    load ".github/tests/status/groups/standard.bkf"
+
+    scenario
+        include standard-paths
+
+    load ".github/tests/status/groups/jsonapi.bkf"
+
+    scenario
+        include jsonapi-disabled

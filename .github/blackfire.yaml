@@ -1,0 +1,42 @@
+name: Blackfire.io
+
+on: push
+
+jobs:
+    setup:
+        name: Setup build
+        runs-on: ubuntu-latest
+        outputs:
+            url: '${{ steps.await-env.outputs.env_url }}'
+            name: '${{ steps.await-env.outputs.integration_name }}'
+            status: '${{ steps.await-env.outputs.commit_status }}'
+            cases: '${{ steps.get-tests.outputs.cases }}'
+        steps:
+            - uses: actions/checkout@v2
+            - name: Wait for deployment to complete
+              id: await-env
+              uses: ./.github/actions/platformsh-wait
+              with:
+                  github-token: '${{ secrets.GITHUB_TOKEN }}'
+
+    build:
+        runs-on: ubuntu-latest
+        name: Run build
+        needs: setup
+        steps:
+            - uses: actions/checkout@v2
+            - name: Setup Blackfire via setup-php Action
+              uses: shivammathur/setup-php@v2
+              with:
+                  extensions: 'blackfire, :xdebug'
+                  tools: 'blackfire, blackfire-player'
+              env:
+                  BLACKFIRE_SERVER_ID: '${{ secrets.BLACKFIRE_SERVER_ID }}'
+                  BLACKFIRE_SERVER_TOKEN: '${{ secrets.BLACKFIRE_SERVER_TOKEN }}'
+                  BLACKFIRE_CLIENT_ID: '${{ secrets.BLACKFIRE_CLIENT_ID }}'
+                  BLACKFIRE_CLIENT_TOKEN: '${{ secrets.BLACKFIRE_CLIENT_TOKEN }}'
+            - name: List vars
+              run: printenv
+            - name: Trigger a Blackfire Build
+              run: blackfire build-trigger ${{ needs.setup.outputs.url }} --env=${{ secrets.BLACKFIRE_ENV_UUID }} --token=${{ secrets.BLACKFIRE_BUILD_TOKEN }}
+              # --title --external-id (commit hash, for example) --external-parent-id (parent commit hash?) --external-url (pr url?)
