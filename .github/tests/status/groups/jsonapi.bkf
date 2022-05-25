@@ -1,0 +1,13 @@
+group jsonapi-enabled
+    
+    visit url('/jsonapi')
+        expect status_code() == 200
+    visit url('/jsonapi/node/article')
+        expect status_code() == 200
+
+group jsonapi-disabled
+    
+    visit url('/jsonapi')
+        expect status_code() == 404
+    visit url('/jsonapi/node/article')
+        expect status_code() == 404

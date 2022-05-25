@@ -1,6 +1,6 @@
 {
-    "name": "drupal/recommended-project",
-    "description": "Project template for Drupal 8 projects with a relocated document root",
+    "name": "chadwcarlson/drupal",
+    "description": "Platform.sh-ready project template for Drupal 8 projects with a relocated document root",
     "type": "project",
     "license": "GPL-2.0-or-later",
     "homepage": "https://www.drupal.org/project/drupal",
@@ -16,9 +16,14 @@
     ],
     "require": {
         "composer/installers": "^1.2",
+        "drupal/console": "^1.9",
         "drupal/core-composer-scaffold": "^8.8",
         "drupal/core-project-message": "^8.8",
-        "drupal/core-recommended": "^8.8"
+        "drupal/core-recommended": "^8.8",
+        "drupal/pathauto": "^1.10",
+        "drupal/redis": "^1.5",
+        "drush/drush": "^10.6",
+        "platformsh/config-reader": "^2.4"
     },
     "require-dev": {
         "drupal/core-dev": "^8.8"
@@ -26,10 +31,13 @@
     "conflict": {
         "drupal/drupal": "*"
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true,
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "platform": {
+            "php": "7.4"
+        }
     },
     "extra": {
         "drupal-scaffold": {

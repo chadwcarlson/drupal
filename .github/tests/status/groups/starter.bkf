@@ -1,0 +1,17 @@
+group starter-root
+
+    # The root path.
+    visit url('/')
+        expect status_code() == 200
+    # The Drupal installer.
+    visit url('/core/install.php')
+        expect status_code() == 200
+
+group installer
+
+    # The root path.
+    visit url('/')
+        expect status_code() == 302
+    # The Drupal installer.
+    visit url('/core/install.php')
+        expect status_code() == 200

@@ -1,0 +1,7 @@
+
+Test: When disabled, JSON API should be inaccessible.
+
+     * PASS - [404] Path: /jsonapi
+     X FAIL - Path: /jsonapi/node/article
+            - Actual: 404
+            - Expected: 200

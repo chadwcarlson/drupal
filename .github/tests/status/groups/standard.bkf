@@ -1,0 +1,62 @@
+group standard-paths
+
+    # The rss feed.
+    visit url('/rss.xml')
+        expect status_code() == 200
+
+    # The user login path.
+    visit url('/user/login')
+        expect status_code() == 200
+
+    # Register new users.
+    visit url('/user/register')
+        expect status_code() == 200
+
+    # Reset user password.
+    visit url('/user/password')
+        expect status_code() == 200
+
+    # Contact information.
+    visit url('/contact')
+        expect status_code() == 200
+        
+    # Search help.
+    visit url('/search/node/help')
+        expect status_code() == 200
+
+    # Search query.
+    visit url('/search/node?keys=something')
+        expect status_code() == 200
+
+    # User profile.
+    visit url('/user/1')
+        expect status_code() == 403
+
+    # Non-existent user profile.
+    visit url('/user/100')
+        expect status_code() == 404
+
+    # Administration configuration.
+    visit url('/admin/config')
+        expect status_code() == 403
+
+group standard-content
+
+    visit url('/blog/dark-and-dusty-sky')
+        expect status_code() == 200
+    visit url('/blog/infrared-andromeda')
+        expect status_code() == 200
+    visit url('/blog/journey-center-galaxy')
+        expect status_code() == 200
+    visit url('/blog/moon-rays-over-thurso-castle')
+        expect status_code() == 200
+    visit url('/blog/unusual-globule-ic-1396')
+        expect status_code() == 200
+    visit url('/blog/bright-spots-resolved-occator-crater-ceres')
+        expect status_code() == 200
+    visit url('/blog/vdb-142-cepheus')
+        expect status_code() == 200
+    visit url('/blog/pwyll-icy-crater-europa')
+        expect status_code() == 200
+    visit url('/blog/circumhorizontal-arc-over-ohio')
+        expect status_code() == 200

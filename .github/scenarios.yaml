@@ -1,0 +1,208 @@
+##########################################################################################
+#     Expected status codes for the Drupal template (with demo cases) on Platform.sh.    #
+##########################################################################################
+cases:
+    starter-root:
+        "name": "Starter Drupal deployment tests"
+        # "prefix": "api"
+        # "suffix": "api"
+        "tests":
+            # Root path.
+            "/": 200
+            # Drupal installer.
+            "/core/install.php": 200
+    standard-paths: 
+        "name": "Drupal installation (standard profile)"
+        "tests":
+            # The rss feed.
+            "/rss.xml": 200
+            # User login path.
+            "/user/login": 200
+            # Register new users.
+            "/user/register": 200
+            # Reset user password.
+            "/user/password": 200
+            # Contact information.
+            "/contact": 200
+            # Search help.
+            "/search/node/help": 200
+            # Search query.
+            "/search/node?keys=something": 200
+            # User profile.
+            "/user/1": 403
+            # Non-existent user profile.
+            "/user/100": 404
+            # Administration configuration.
+            "/admin/config": 403
+    standard-content:
+        "name": "Drupal installation (standard profile) with demo content"
+        "tests":
+            # Initialized blog articles.
+            "/blog/dark-and-dusty-sky": 200
+            "/blog/infrared-andromeda": 200
+            "/blog/journey-center-galaxy": 200
+            "/blog/moon-rays-over-thurso-castle": 200
+            "/blog/unusual-globule-ic-1396": 200
+            "/blog/bright-spots-resolved-occator-crater-ceres": 200
+            "/blog/spirit-rover-engineering-flats-mars": 200
+            "/blog/vdb-142-cepheus": 200
+            "/blog/pwyll-icy-crater-europa": 200
+            "/blog/circumhorizontal-arc-over-ohio": 200
+    umami-content:
+        "name": "Drupal installation (Umami demo profile) with demo content"
+        "tests":
+            # English translation pages
+            "/en": 200
+            "/en/about-umami": 200
+            # Articles
+            "/en/articles": 200
+            "/en/articles/give-it-a-go-and-grow-your-own-herbs": 200
+            "/en/articles/dairy-free-and-delicious-milk-chocolate": 200
+            "/en/articles/the-real-deal-for-supermarket-savvy-shopping": 200
+            "/en/articles/the-umami-guide-to-our-favourite-mushrooms": 200
+            "/en/articles/lets-hear-it-for-carrots": 200
+            "/en/articles/baking-mishaps-our-troubleshooting-tips": 200
+            "/en/articles/skip-the-spirits-with-delicious-mocktails": 200
+            "/en/articles/give-your-oatmeal-the-ultimate-makeover": 200
+            # Recipes
+            "/en/recipes": 200
+            "/en/recipes/deep-mediterranean-quiche": 200
+            "/en/recipes/vegan-chocolate-and-nut-brownies": 200
+            "/en/recipes/super-easy-vegetarian-pasta-bake": 200
+            "/en/recipes/watercress-soup": 200
+            "/en/recipes/victoria-sponge-cake": 200
+            "/en/recipes/gluten-free-pizza": 200
+            "/en/recipes/thai-green-curry": 200
+            "/en/recipes/crema-catalana": 200
+            "/en/recipes/fiery-chili-sauce": 200
+            # Tags
+            "/en/tags/alcohol-free": 200
+            "/en/tags/baked": 200
+            "/en/tags/baking": 200
+            "/en/tags/breakfast": 200
+            "/en/tags/cake": 200
+            "/en/tags/carrots": 200
+            "/en/tags/chocolate": 200
+            "/en/tags/cocktail-party": 200
+            "/en/tags/dairy-free": 200
+            "/en/tags/dessert": 200
+            "/en/tags/dinner-party": 200
+            "/en/tags/drinks": 200
+            "/en/tags/egg": 200
+            "/en/tags/grow-your-own": 200
+            "/en/tags/healthy": 200
+            "/en/tags/herbs": 200
+            # Spanish translation pages
+            #   * Note: commented out endpoints (UnicodeEncodeError: 'ascii' codec can't encode character u'\xe1' in position 27: ordinal not in range(128))
+            "/es": 200
+            "/es/acerca-de-umami": 200
+            # Articles
+            "/es/articles": 200
+            "/es/articles/prueba-y-cultiva-tus-propias-hierbas": 200
+            "/es/articles/delicioso-chocolate-sin-lactosa": 200
+            "/es/articles/el-verdadeo-negocio-para-comprar-en-el-supermercado": 200
+            "/es/articles/guia-umami-de-nuestras-setas-preferidas": 200
+            "/es/articles/un-aplauso-para-las-zanahorias": 200
+            "/es/articles/percances-al-hornear-nuestros-consejos-para-solucionar-problemas": 200
+            "/es/articles/salta-los-espiritus-con-deliciosos-cocteles-sin-alcohol": 200
+            "/es/articles/dale-a-tu-avena-el-cambio-de-imagen-definitivo": 200
+            # Recipes
+            "/es/recipes": 200
+            # "/es/recipes/quiche-mediterráneo-profundo": 200
+            "/es/recipes/bizcochos-veganos-de-chocolate-y-nueces": 200
+            "/es/recipes/pasta-vegetariana-horno-super-facil": 200
+            "/es/recipes/sopa-de-berro": 200
+            "/es/recipes/pastel-victoria": 200
+            "/es/recipes/pizza-sin-gluten": 200
+            "/es/recipes/curry-verde-tailandes": 200
+            "/es/recipes/crema-catalana": 200
+            "/es/recipes/salsa-de-chile-ardiente": 200
+            # Tags
+            "/es/tags/sin-alcohol": 200
+            "/es/tags/horneado": 200
+            # "/es/tags/cocción": 200
+            "/es/tags/desayuno": 200
+            "/es/tags/pastel": 200
+            "/es/tags/zanahorias": 200
+            "/es/tags/chocolate": 200
+            "/es/tags/fiesta-de-coctel": 200
+            "/es/tags/sin-lactosa": 200
+            "/es/tags/postre": 200
+            "/es/tags/fiesta-de-cena": 200
+            "/es/tags/bebidas": 200
+            "/es/tags/huevo": 200
+            "/es/tags/cultiva-los-tuyos": 200
+            "/es/tags/saludable": 200
+            "/es/tags/hierbas": 200
+    "umami-paths": 
+        "name": "Drupal installation (Umami demo profile)"
+        "tests":
+            # User login path.
+            "/user/login": 200
+            # Reset user password.
+            "/user/password": 200
+            # Contact information.
+            "/contact": 200
+            # Search help.
+            "/search/node/help": 200
+            # Search query.
+            "/search/node?keys=something": 200
+            # User profile.
+            "/user/1": 403
+            # Non-existent user profile.
+            "/user/100": 404
+            # Administration configuration.
+            "/admin/config": 403
+    "jsonapi-disabled":
+        "name": "When disabled, JSON API should be inaccessible."
+        "tests":
+            # Root.
+            "/jsonapi": 404
+            # Article nodes endpoint. 
+            "/jsonapi/node/article": 404 
+    "jsonapi-enabled":
+        "name": "When enabled, JSON API should be accessible."
+        "tests":
+            # JSON API Root.
+            "/jsonapi": 200
+            # JSON API article nodes list endpoint. 
+            "/jsonapi/node/article": 200
+
+# Test scenarios for verifying statuses.
+scenarios: 
+    starter: 
+        - starter-root
+    standard: 
+        - starter-root
+        - standard-paths
+        - jsonapi-disabled
+    standard-demo:
+        - starter-root
+        - standard-paths
+        - standard-content
+        - jsonapi-disabled
+    umami-demo:
+        - starter-root
+        - umami-content
+        - umami-paths
+        - jsonapi-disabled
+
+        
+    nextjs:
+        - starter-root
+        - standard-paths
+        - jsonapi-enabled
+    nextjs-demo:
+        - starter-root
+        - standard-paths
+        - standard-content
+        - jsonapi-enabled
+    gatsby:
+        - starter-root
+        - standard-paths
+        - jsonapi-enabled
+    gatsby-demo:
+        - starter-root
+        - standard-paths
+        - standard-content
+        - jsonapi-enabled
