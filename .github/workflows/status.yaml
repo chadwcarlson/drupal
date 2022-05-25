@@ -1,6 +1,9 @@
 name: "Statuses"
 
-on: push
+on: 
+    pull_request:
+        branches:
+            - main
 #  https://github.com/meroware/example-workflow-dispatch/blob/master/.github/workflows/test.yml
 #  https://github.com/marketplace/actions/workflow-dispatch
 #  https://github.blog/changelog/2020-07-06-github-actions-manual-triggers-with-workflow_dispatch/
@@ -10,9 +13,6 @@ on: push
 #             - Status
 #         types:
 #             - completed
-    # pull_request:
-    #     branches:
-    #         - main
 
 env:
     START_SCENARIO: "starter"
@@ -25,7 +25,7 @@ env:
 
 jobs:
     initial:
-        name: Setup and test starter scenario
+        name: Test starter scenario
         runs-on: ubuntu-latest
         outputs:
             scenarios: ${{ steps.scenarios.outputs.list }}
@@ -118,5 +118,7 @@ jobs:
               run: |
                   platform environment:deactivate --no-delete-branch -y
                   platform environment:activate -y
-            # - name: Verify the environment has been reset
-            #   run: blackfire-player run .github/tests/status/scenarios/${{ env.START_SCENARIO }}.yml --endpoint=${{ steps.await-env.outputs.env_url }}
+            - name: Verify the environment has been reset
+              run: |
+                  cp .github/tests/status/scenarios/${{ env.START_SCENARIO }}.yml blackfire.yaml
+                  blackfire-player run blackfire.yaml --endpoint=${{ steps.await-env.outputs.env_url }}
