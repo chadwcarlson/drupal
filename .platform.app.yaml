@@ -45,19 +45,7 @@ hooks:
     # fast.
     deploy: |
         set -e
-        cd asdf || echo "Command just plain don't work"
-
-        # Setup drush. 
-        php ./drush/platformsh_generate_drush_yml.php
-
-        # Run the Platform.sh demo, if enabled.
-        .platform-scripts/demo.sh
-
-        # Drupal deployment tasks.
-        drush -q -y cache-rebuild
-        drush -q -y updatedb
-        drush -q -y config-import
-
+        ./deploy.sh || echo "Something failed"
 # The relationships of the application with services or other applications.
 #
 # The left-hand side is the name of the relationship as it will be exposed
