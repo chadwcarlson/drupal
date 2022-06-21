@@ -44,7 +44,7 @@ hooks:
     # The site is not accepting requests while this script runs so keep it
     # fast.
     deploy: |
-
+        set -e
         cd asdf || echo "Command just plain don't work"
 
         # Setup drush. 
