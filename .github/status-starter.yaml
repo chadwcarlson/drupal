@@ -1,0 +1,28 @@
+name: "[starter] Status"
+
+on: push
+    # workflow_run:
+    #     workflows: ["platformsh"]
+    #     types:
+    #         - completed
+    # pull_request:
+    #     branches:
+    #         - main
+
+env:
+    SCENARIO: "starter"
+    SCENARIO_FILE: ".github/tests/data/statuses.yaml"
+
+jobs:
+    test:
+        name: Run status checks
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - name: Run the current scenario post-deployment
+              id: run-tests
+              uses: ./.github/actions/platformsh-status
+              with:
+                  github-token: '${{ secrets.GITHUB_TOKEN }}'
+                  scenario: ${{ env.SCENARIO }}
+                  scenario-file: ${{ env.SCENARIO_FILE }}

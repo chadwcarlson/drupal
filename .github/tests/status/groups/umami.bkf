@@ -1,0 +1,161 @@
+group umami-paths
+    
+    visit url('/user/login')
+        expect status_code() == 200
+    visit url('/user/password')
+        expect status_code() == 200
+    visit url('/contact')
+        expect status_code() == 200
+    visit url('/search/node/help')
+        expect status_code() == 200
+    visit url('/user/1')
+        expect status_code() == 403
+    visit url('/user/100')
+        expect status_code() == 404
+    visit url('/admin/config')
+        expect status_code() == 403
+
+group umami-content
+    
+    visit url('/en')
+        expect status_code() == 200
+    visit url('/en/about-umami')
+        expect status_code() == 200
+    visit url('/en/articles')
+        expect status_code() == 200
+    visit url('/en/articles/give-it-a-go-and-grow-your-own-herbs')
+        expect status_code() == 200
+    visit url('/en/articles/dairy-free-and-delicious-milk-chocolate')
+        expect status_code() == 200
+    visit url('/en/articles/the-real-deal-for-supermarket-savvy-shopping')
+        expect status_code() == 200
+    visit url('/en/articles/the-umami-guide-to-our-favourite-mushrooms')
+        expect status_code() == 200
+    visit url('/en/articles/lets-hear-it-for-carrots')
+        expect status_code() == 200
+    visit url('/en/articles/baking-mishaps-our-troubleshooting-tips')
+        expect status_code() == 200
+    visit url('/en/articles/skip-the-spirits-with-delicious-mocktails')
+        expect status_code() == 200
+    visit url('/en/articles/give-your-oatmeal-the-ultimate-makeover')
+        expect status_code() == 200
+
+    visit url('/en/recipes')
+        expect status_code() == 200
+    visit url('/en/recipes/deep-mediterranean-quiche')
+        expect status_code() == 200
+    visit url('/en/recipes/super-easy-vegetarian-pasta-bake')
+        expect status_code() == 200
+    visit url('/en/recipes/watercress-soup')
+        expect status_code() == 200
+    visit url('/en/recipes/victoria-sponge-cake')
+        expect status_code() == 200
+    visit url('/en/recipes/gluten-free-pizza')
+        expect status_code() == 200
+    visit url('/en/recipes/thai-green-curry')
+        expect status_code() == 200
+    visit url('/en/recipes/crema-catalana')
+        expect status_code() == 200
+    visit url('/en/recipes/fiery-chili-sauce')
+        expect status_code() == 200
+
+    visit url('/en/tags/alcohol-free')
+        expect status_code() == 200
+    visit url('/en/tags/baked')
+        expect status_code() == 200
+    visit url('/en/tags/breakfast')
+        expect status_code() == 200
+    visit url('/en/tags/cake')
+        expect status_code() == 200
+    visit url('/en/tags/carrots')
+        expect status_code() == 200
+    visit url('/en/tags/chocolate')
+        expect status_code() == 200
+    visit url('/en/tags/cocktail-party')
+        expect status_code() == 200
+    visit url('/en/tags/dairy-free')
+        expect status_code() == 200
+    visit url('/en/tags/dessert')
+        expect status_code() == 200
+    visit url('/en/tags/dinner-party')
+        expect status_code() == 200
+    visit url('/en/tags/drinks')
+        expect status_code() == 200
+    visit url('/en/tags/egg')
+        expect status_code() == 200
+    visit url('/en/tags/grow-your-own')
+        expect status_code() == 200
+    visit url('/en/tags/healthy')
+        expect status_code() == 200
+    visit url('/en/tags/herbs')
+        expect status_code() == 200
+
+
+    visit url('/es')
+        expect status_code() == 200
+    visit url('/es/acerca-de-umami')
+        expect status_code() == 200
+    visit url('/es/articles/prueba-y-cultiva-tus-propias-hierbas')
+        expect status_code() == 200
+    visit url('/es/articles/el-verdadeo-negocio-para-comprar-en-el-supermercado')
+        expect status_code() == 200
+    visit url('/es/articles/guia-umami-de-nuestras-setas-preferidas')
+        expect status_code() == 200
+    visit url('/es/articles/un-aplauso-para-las-zanahorias')
+        expect status_code() == 200
+    visit url('/es/articles/percances-al-hornear-nuestros-consejos-para-solucionar-problemas')
+        expect status_code() == 200
+    visit url('/es/articles/salta-los-espiritus-con-deliciosos-cocteles-sin-alcohol')
+        expect status_code() == 200
+    visit url('/es/articles/dale-a-tu-avena-el-cambio-de-imagen-definitivo')
+        expect status_code() == 200
+
+    visit url('/es/recipes')
+        expect status_code() == 200
+    visit url('/es/recipes/bizcochos-veganos-de-chocolate-y-nueces')
+        expect status_code() == 200
+    visit url('/es/recipes/pasta-vegetariana-horno-super-facil')
+        expect status_code() == 200
+    visit url('/es/recipes/sopa-de-berro')
+        expect status_code() == 200
+    visit url('/es/recipes/pastel-victoria')
+        expect status_code() == 200
+    visit url('/es/recipes/pizza-sin-gluten')
+        expect status_code() == 200
+    visit url('/es/recipes/curry-verde-tailandes')
+        expect status_code() == 200
+    visit url('/es/recipes/crema-catalana')
+        expect status_code() == 200
+    visit url('/es/recipes/salsa-de-chile-ardiente')
+        expect status_code() == 200
+
+    visit url('/es/tags/sin-alcohol')
+        expect status_code() == 200
+    visit url('/es/tags/horneado')
+        expect status_code() == 200
+    visit url('/es/tags/desayuno')
+        expect status_code() == 200
+    visit url('/es/tags/pastel')
+        expect status_code() == 200
+    visit url('/es/tags/zanahorias')
+        expect status_code() == 200
+    visit url('/es/tags/chocolate')
+        expect status_code() == 200
+    visit url('/es/tags/fiesta-de-coctel')
+        expect status_code() == 200
+    visit url('/es/tags/sin-lactosa')
+        expect status_code() == 200
+    visit url('/es/tags/postre')
+        expect status_code() == 200
+    visit url('/es/tags/fiesta-de-cena')
+        expect status_code() == 200
+    visit url('/es/tags/bebidas')
+        expect status_code() == 200
+    visit url('/es/tags/huevo')
+        expect status_code() == 200
+    visit url('/es/tags/cultiva-los-tuyos')
+        expect status_code() == 200
+    visit url('/es/tags/saludable')
+        expect status_code() == 200
+    visit url('/es/tags/hierbas')
+        expect status_code() == 200
