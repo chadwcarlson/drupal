@@ -44,7 +44,6 @@ hooks:
     # The site is not accepting requests while this script runs so keep it
     # fast.
     deploy: |
-        set -e
         ./deploy.sh || echo "Something failed"
 # The relationships of the application with services or other applications.
 #
