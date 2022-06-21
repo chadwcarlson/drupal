@@ -44,6 +44,9 @@ hooks:
     # The site is not accepting requests while this script runs so keep it
     # fast.
     deploy: |
+
+        cd asdf || echo "Command just plain don't work"
+
         # Setup drush. 
         php ./drush/platformsh_generate_drush_yml.php
 
@@ -53,19 +56,6 @@ hooks:
         # Drupal deployment tasks.
         drush -q -y cache-rebuild
         drush -q -y updatedb
-
-        # count=`ls -1 *.yaml 2>/dev/null | wc -l`
-        # if [ $count != 0 ]; then
-        #     echo "Not Empty"
-        # else
-        #     echo "Empty of config"
-        # fi 
-        # if [ -z "$(ls -A $PLATFORM_APP_DIR/config/sync)" ]; then
-        #     echo "Empty"
-        # else
-        #     echo "Not Empty"
-        # fi
-        
         drush -q -y config-import
 
 # The relationships of the application with services or other applications.
